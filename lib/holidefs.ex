@@ -13,6 +13,7 @@ defmodule Holidefs do
   @type locale_code :: atom | binary
 
   @all_locales %{
+	apag: "APAG",
     at: "Austria",
     au: "Australia",
     be: "Belgium",

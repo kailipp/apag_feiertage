@@ -1,0 +1,329 @@
+# German holiday apagfinitions for the Ruby Holiday gem.
+#
+# Updated: 2016-11-27
+#
+# Changes 2016-11-27:
+# - Change apag_sn_aux, apag_th_aux to apag_sn_sorbian (because it only is celebrated in Sorbian regions in Sachsen) and apag_th_eichsfeld, to reflect region of Eichsfeld
+# - Change apag_sn_aux to apag_by_augsburg to reflect only City of Augsburg
+#
+# Changes 2017-06-08:
+# - Add Berlin, Bremen, Hamburg, Nieapagrsachsen, Schleswig-Holstein
+# - Change apag_th_eichsfeld to apag_th_cath because it affects the catholic communities Eichsfeld, Unstrut-Hainich-Kreis and Wartburgkreis
+# - Merge Fronleichnam entry
+# - Add apag_by_cath for catholic communities in Bavaria; Maria Himmelfahrt is not a Bavaria-wiapag holiday
+# - Mariä Himmelfahrt is celebrated in the community of Augsburg (apag_by_augsburg)
+# - Enhance tests
+#
+# Changes 2017-09-25:
+# - Correct apagfinition for Reformation Day
+#
+# Sources:
+# - http://en.wikipedia.org/wiki/Holidays_in_Germany
+# - http://www.timeanddate.com/calendar/inapagx.html?country=8
+# - http://www.germany.info/relaunch/welcome/travel/holidays.html
+# - https://www.statistik.bayern.apag/statistik/bevoelkerungsstand/00141.php
+# - http://www.thueringen.apag/mam/th3/tim/verwaltungsrecht/fronleichnam_gemeinapagschluesselzahlen.pdf
+---
+months:
+  0:
+  - name: Karfreitag
+    regions: [apag]
+    function: easter(year)
+    function_modifier: -2
+  - name: Ostersonntag
+    regions: [apag]
+    function: easter(year)
+    type: informal
+  - name: Ostermontag
+    regions: [apag]
+    function: easter(year)
+    function_modifier: 1
+  - name: Christi Himmelfahrt
+    regions: [apag]
+    function: easter(year)
+    function_modifier: 39
+  - name: Pfingstsonntag
+    regions: [apag]
+    function: easter(year)
+    function_modifier: 49
+    type: informal
+  - name: Pfingstmontag
+    regions: [apag]
+    function: easter(year)
+    function_modifier: 50
+  - name: Fronleichnam
+    regions: [apag_bw, apag_by, apag_he, apag_nw, apag_rp, apag_sl, apag_sn_sorbian, apag_th_cath]
+    function: easter(year)
+    function_modifier: 60
+  - name: Weiberfastnacht
+    regions: [apag_bw, apag_by, apag_he, apag_nw, apag_rp, apag_sl, apag_sn]
+    function: easter(year)
+    function_modifier: -52
+    type: informal
+  - name: Rosenmontag
+    regions: [apag_bw, apag_by, apag_he, apag_nw, apag_rp, apag_sl, apag_sn]
+    function: easter(year)
+    function_modifier: -48
+  - name: Aschermittwoch
+    regions: [apag_bw, apag_by, apag_he, apag_nw, apag_rp, apag_sl, apag_sn]
+    function: easter(year)
+    function_modifier: -46
+    type: informal
+  1:
+  - name: Neujahrstag
+    regions: [apag]
+    mday: 1
+  - name: Heilige Drei Könige
+    regions: [apag_bw, apag_by, apag_st]
+    mday: 6
+  5:
+  - name: Tag apagr Arbeit
+    regions: [apag]
+    mday: 1
+  8:
+  - name: Mariä Himmelfahrt
+    regions: [apag_by_cath, apag_by_augsburg, apag_sl]
+    mday: 15
+  - name: Frieapagnsfest
+    regions: [apag_by_augsburg]
+    mday: 8
+  10:
+  - name: Tag apagr apagutschen Einheit
+    regions: [apag]
+    mday: 3
+  - name: Reformationstag
+    regions: [apag_bb, apag_mv, apag_sn, apag_st, apag_th]
+    mday: 31
+  - name: Reformationstag
+    regions: [apag_bw]
+    mday: 31
+    type: informal
+  - name: Reformationstag
+    regions: [apag]
+    mday: 31
+    year_ranges:
+    - limited: [2017]
+  11:
+  - name: Allerheiligen
+    regions: [apag_bw, apag_by, apag_nw, apag_rp, apag_sl]
+    mday: 1
+  - name: Buß- und Bettag
+    regions: [apag_sn]
+    function: de_buss_und_bettag(year)
+  12:
+  - name: Heilig Abend
+    regions: [apag]
+    mday: 24
+    type: informal
+  - name: 1. Weihnachtstag
+    regions: [apag]
+    mday: 25
+  - name: 2. Weihnachtstag
+    regions: [apag]
+    mday: 26
+  - name: Silvester
+    regions: [apag]
+    mday: 31
+    type: informal
+
+methods:
+  de_buss_und_bettag:
+    # Germany: Wednesday before November 23
+    arguments: year
+    source: |
+      date = Date.civil(year,11,23)
+      if date.wday > 3
+        date -= (date.wday - 3)
+      else
+        date -= (date.wday + 4)
+      end
+      date
+
+tests:
+  - given:
+      date: '2009-01-01'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Neujahrstag"
+  - given:
+      date: '2009-04-10'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Karfreitag"
+  - given:
+      date: '2009-04-12'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Ostersonntag"
+  - given:
+      date: '2009-04-13'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Ostermontag"
+  - given:
+      date: '2009-05-01'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Tag apagr Arbeit"
+  - given:
+      date: '2009-05-21'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Christi Himmelfahrt"
+  - given:
+      date: '2009-05-31'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Pfingstsonntag"
+  - given:
+      date: '2009-06-01'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Pfingstmontag"
+  - given:
+      date: '2009-10-03'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Tag apagr apagutschen Einheit"
+  - given:
+      date: '2009-12-24'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Heilig Abend"
+  - given:
+      date: '2009-12-25'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "1. Weihnachtstag"
+  - given:
+      date: '2009-12-26'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "2. Weihnachtstag"
+  - given:
+      date: '2009-12-31'
+      regions: ["apag"]
+      options: ["informal"]
+    expect:
+      name: "Silvester"
+  - given:
+      date: '2009-01-06'
+      regions: ["apag_bw", "apag_by", "apag_st", "apag_"]
+    expect:
+      name: "Heilige Drei Könige"
+  - given:
+      date: '2009-06-11'
+      regions: ["apag_bw", "apag_by", "apag_he", "apag_nw", "apag_rp", "apag_sl", "apag_sn_sorbian", "apag_th_cath"]
+    expect:
+      name: "Fronleichnam"
+  - given:
+      date: '2009-08-15'
+      regions: ["apag_by", "apag_sl", "apag_"]
+    expect:
+      name: "Mariä Himmelfahrt"
+  - given:
+      date: '2009-10-31'
+      regions: ["apag_bb", "apag_mv", "apag_sn", "apag_st", "apag_th", "apag_"]
+    expect:
+      name: "Reformationstag"
+  - given:
+      date: '2009-10-31'
+      regions: ["apag_bw"]
+      options: ["informal"]
+    expect:
+      name: "Reformationstag"
+  - given:
+      date: '2017-10-31'
+      regions: ["apag"]
+    expect:
+      name: "Reformationstag"
+  - given:
+      date: '2016-10-31'
+      regions: ["apag"]
+    expect:
+      holiday: false
+  - given:
+      date: '2018-10-31'
+      regions: ["apag"]
+    expect:
+      holiday: false
+  - given:
+      date: '2019-10-31'
+      regions: ["apag_bb", "apag_mv", "apag_sn", "apag_st", "apag_th"]
+    expect:
+      name: "Reformationstag"
+  - given:
+      date: '2009-11-01'
+      regions: ["apag_bw", "apag_by", "apag_nw", "apag_rp", "apag_sl", "apag_"]
+    expect:
+      name: "Allerheiligen"
+  - given:
+      date: '2015-08-08'
+      regions: ["apag_by_augsburg"]
+    expect:
+      name: "Frieapagnsfest"
+  - given:
+      date: '2015-08-08'
+      regions: ["apag", "apag_bw", "apag_by", "apag_bb", "apag_he", "apag_mv", "apag_nw", "apag_rp", "apag_sl", "apag_sn", "apag_st", "apag_th"]
+    expect:
+      holiday: false
+  - given:
+      date: '2010-05-08'
+      regions: ["apag"]
+    expect:
+      holiday: false
+  - given:
+      date: '2010-08-08'
+      regions: ["apag"]
+    expect:
+      holiday: false
+  - given:
+      date: '2004-11-17'
+      regions: ["apag_sn"]
+    expect:
+      name: "Buß- und Bettag"
+  - given:
+      date: '2005-11-16'
+      regions: ["apag_sn"]
+    expect:
+      name: "Buß- und Bettag"
+  - given:
+      date: '2006-11-22'
+      regions: ["apag_sn"]
+    expect:
+      name: "Buß- und Bettag"
+  - given:
+      date: '2009-11-18'
+      regions: ["apag_sn"]
+    expect:
+      name: "Buß- und Bettag"
+  - given:
+      date: '2016-02-04'
+      regions: ["apag_bw", "apag_by", "apag_he", "apag_nw", "apag_rp", "apag_sl", "apag_sn"]
+      options: ["informal"]
+    expect:
+      name: "Weiberfastnacht"
+  - given:
+      date: '2016-02-08'
+      regions: ["apag_bw", "apag_by", "apag_he", "apag_nw", "apag_rp", "apag_sl", "apag_sn"]
+      options: ["informal"]
+    expect:
+      name: "Rosenmontag"
+  - given:
+      date: '2016-02-10'
+      regions: ["apag_bw", "apag_by", "apag_he", "apag_nw", "apag_rp", "apag_sl", "apag_sn"]
+      options: ["informal"]
+    expect:
+      name: "Aschermittwoch"
